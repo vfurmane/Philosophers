@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 09:24:12 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/04 12:19:25 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/04 17:35:45 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int			ap_search_arg(t_arg_list *list, t_arg_flag flag, t_arg_type type);
 t_arg_list	*ap_get_arg(t_arg_list *list, t_arg_flag flag, t_arg_type type);
 
 void		ap_free(t_arg_list *list);
-void		argparse(int argc, char **argv, t_arg_list *list);
+int			argparse(int argc, char **argv, t_arg_list *list);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 09:23:10 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/04 12:18:11 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/04 17:32:54 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	check_flag_presence(t_arg_list *list, t_arg_flag flag, t_arg_type type)
 		arg->enabled = true;
 }
 
-void	argparse(int argc, char **argv, t_arg_list *list)
+int	argparse(int argc, char **argv, t_arg_list *list)
 {
 	int			i;
 	int			j;
@@ -47,6 +47,7 @@ void	argparse(int argc, char **argv, t_arg_list *list)
 		}
 		i++;
 	}
+	return (i);
 }
 
 void	ap_free(t_arg_list *list)
