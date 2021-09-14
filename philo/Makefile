@@ -6,7 +6,7 @@
 #    By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/03 21:32:49 by vfurmane          #+#    #+#              #
-#    Updated: 2021/09/05 12:48:43 by vfurmane         ###   ########.fr        #
+#    Updated: 2021/09/06 11:43:39 by vfurmane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ RM			= rm -f
 all:		$(NAME)
 
 $(NAME):	$(OBJS)
-			$(CC) $(CFLAGS) $^ -o $(NAME)
+			$(CC) $(CFLAGS) $(LIBS) $^ -o $(NAME)
 
 bonus:		all
 

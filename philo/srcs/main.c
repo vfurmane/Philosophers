@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:08 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/05 20:06:39 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/06 12:05:33 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,34 @@ int	parse_philo_args(t_philo_config *config, int argc, char **argv)
 	if (argc == 5)
 		config->min_eat_no = ft_atoi(argv[4]);
 	return (1);
+}
+
+void	*nothing(void *param)
+{
+	(void)param;
+	return (NULL);
+}
+
+int	simulation(t_philo_config *config)
+{
+	uint32_t	i;
+	t_philo		*philos;
+
+	philos = malloc(config->philos_no * sizeof (*philos));
+	i = 0;
+	while (i < config->philos_no)
+	{
+		pthread_create(&philos[i].thread, NULL, nothing, NULL);
+		i++;
+	}
+	i = 0;
+	while (i < config->philos_no)
+	{
+		pthread_join(philos[i].thread, NULL);
+		i++;
+	}
+	free(philos);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -52,5 +80,5 @@ int	main(int argc, char **argv)
 	if (parse_philo_args(&config, argc - arg_start, &argv[arg_start]) < 0)
 		return (1);
 	ap_free(list);
-	return (0);
+	return (simulation(&config));
 }
