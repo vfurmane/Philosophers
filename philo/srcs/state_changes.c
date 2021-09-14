@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:01:56 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/08 11:20:46 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/08 11:34:12 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,20 @@ int	philo_take_fork(t_philo *philo, pthread_mutex_t *fork)
 int	philo_start_eating(t_philo *philo)
 {
 	philo->state = PHILO_EATING;
-	printf("%-20ld %-10d is eating\n", 0l, philo->id);
+	printf("%-20ld %-10d is eating\n", time_since_start(philo->start_time), philo->id);
 	return (0);
 }
 
 int	philo_start_sleeping(t_philo *philo)
 {
 	philo->state = PHILO_SLEEPING;
-	printf("%-20ld %-10d is sleeping\n", 0l, philo->id);
+	printf("%-20ld %-10d is sleeping\n", time_since_start(philo->start_time), philo->id);
 	return (0);
 }
 
 int	philo_start_thinking(t_philo *philo)
 {
 	philo->state = PHILO_THINKING;
-	printf("%-20ld %-10d is thinking\n", 0l, philo->id);
+	printf("%-20ld %-10d is thinking\n", time_since_start(philo->start_time), philo->id);
 	return (0);
 }
