@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   put.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/03 21:33:08 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/03 23:01:48 by vfurmane         ###   ########.fr       */
+/*   Created: 2021/09/03 22:56:51 by vfurmane          #+#    #+#             */
+/*   Updated: 2021/09/03 23:02:12 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	print_usage(char *program_name)
 {
-	(void)argc; /* ===== DELETE ===== */
-	print_usage(argv[0]);
-	return (0);
+	printf("Usage: %s [-h]\n\n", program_name);
+	printf("  -h, --help\tdisplay this help and exit\n");
 }
