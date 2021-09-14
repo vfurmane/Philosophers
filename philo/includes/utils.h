@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/05 14:59:42 by vfurmane         ###   ########.fr       */
+/*   Created: 2021/09/05 11:01:09 by vfurmane          #+#    #+#             */
+/*   Updated: 2021/09/05 19:45:54 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef UTILS_H
+# define UTILS_H
 
-# include <stdbool.h>
-# include <stdint.h>
-# include <stdio.h>
-# include "argparse.h"
-# include "utils.h"
+# include <stdlib.h>
 
-typedef	struct s_philo_config
-{
-	uint32_t	philos_no;
-	uint32_t	time_to_die;
-	uint32_t	time_to_eat;
-	uint32_t	time_to_sleep;
-	uint32_t	min_eat_no;
-}				t_philo_config;
-
-t_arg_list	*add_all_args(void);
-bool		help_needed(t_arg_list *list);
-
-void		print_usage(char *program_name);
+int		ft_atoi(const char *str);
+int		ft_isdigit(int chr);
+int		ft_is_positive_int(const char *str);
+int		ft_strlen(const char *str);
 
 #endif
