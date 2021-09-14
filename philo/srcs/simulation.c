@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/07 17:00:08 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/08 09:24:30 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,37 @@
 
 void	*simulate_philo_life(t_philo *philo)
 {
-	if (philo->state == PHILO_NOTHING)
+	while (true)
 	{
-		pthread_mutex_lock(philo->forks_lock);
-		if (philo->left_fork->__data.__lock == 0
-			&& philo->right_fork->__data.__lock == 0)
+		if (philo->state == PHILO_NOTHING
+			|| philo->state == PHILO_THINKING)
 		{
-			if (philo_take_fork(philo->id, philo->left_fork) < 0)
-				pthread_exit(NULL);
-			if (philo_take_fork(philo->id, philo->right_fork) < 0)
-				pthread_exit(NULL);
+			pthread_mutex_lock(philo->forks_lock);
+			if (philo->left_fork->__data.__lock == 0
+				&& philo->right_fork->__data.__lock == 0)
+			{
+				if (philo_take_fork(philo->id, philo->left_fork) < 0)
+					pthread_exit(NULL);
+				if (philo_take_fork(philo->id, philo->right_fork) < 0)
+					pthread_exit(NULL);
+				philo_start_eating(philo->id, &philo->state);
+			}
+			pthread_mutex_unlock(philo->forks_lock);
 		}
-		pthread_mutex_unlock(philo->forks_lock);
-		philo->state = PHILO_EATING; /* change state */
-		usleep(2000000);
-		if (pthread_mutex_unlock(philo->left_fork) < 0)
-			pthread_exit(NULL);
-		if (pthread_mutex_unlock(philo->right_fork) < 0)
-			pthread_exit(NULL);
-		philo->state = PHILO_SLEEPING; /* change state */
+		else if (philo->state == PHILO_EATING)
+		{
+			usleep(2000000); /* ===== DELETE ===== */
+			if (pthread_mutex_unlock(philo->left_fork) < 0)
+				pthread_exit(NULL);
+			if (pthread_mutex_unlock(philo->right_fork) < 0)
+				pthread_exit(NULL);
+			philo_start_sleeping(philo->id, &philo->state);
+		}
+		else if (philo->state == PHILO_SLEEPING)
+		{
+			usleep(2000000); /* ===== DELETE ===== */
+			philo_start_thinking(philo->id, &philo->state);
+		}
 	}
 	pthread_exit(NULL);
 }

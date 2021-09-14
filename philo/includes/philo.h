@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/07 16:24:14 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/08 09:24:06 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,8 @@ void		print_usage(char *program_name);
 int			simulation(t_philo_config *config);
 
 int			philo_take_fork(uint32_t id, pthread_mutex_t *fork);
+int			philo_start_eating(uint32_t id, t_state *state);
+int			philo_start_sleeping(uint32_t id, t_state *state);
+int			philo_start_thinking(uint32_t id, t_state *state);
 
 #endif
