@@ -27,11 +27,14 @@ int	parse_philo_args(t_philo_config *config, int argc, char **argv)
 
 	i = 0;
 	while (i < argc)
+	{
 		if (!ft_is_positive_int(argv[i++]))
 		{
-			printf("\033[31mThe given parameters must be positive integers...\033[0m\n");
+			printf("\033[31mThe given parameters must be "
+				"positive integers...\033[0m\n");
 			return (-1);
 		}
+	}
 	config->philos_no = ft_atoi(argv[0]);
 	config->time_to_die = ft_atoi(argv[1]);
 	config->time_to_eat = ft_atoi(argv[2]);

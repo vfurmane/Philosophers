@@ -145,7 +145,7 @@ int	simulation(t_philo_config *config)
 	while (i < config->philos_no)
 	{
 		if (pthread_create(&philos[i].thread, NULL,
-			(void *(*)(void *))simulate_philo_life, &philos[i]) != 0)
+				(void *(*)(void *))simulate_philo_life, &philos[i]) != 0)
 			return (1);
 		i++;
 	}
