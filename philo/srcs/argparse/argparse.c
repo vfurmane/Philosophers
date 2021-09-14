@@ -56,9 +56,8 @@ int	argparse(int argc, char **argv, t_arg_list *list)
 			j = 1;
 			while (argv[i][j] != '\0')
 			{
-				flag.chr = argv[i][j];
+				flag.chr = argv[i][j++];
 				check_flag_presence(list, flag, SHORT_ARG);
-				j++;
 			}
 		}
 		i++;
