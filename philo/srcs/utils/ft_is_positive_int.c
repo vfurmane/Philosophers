@@ -25,6 +25,8 @@ int	ft_is_positive_int(const char *str)
 	char		*max_int;
 
 	max_int = "2147483647";
+	while (*str == '0' && ft_isdigit(*str))
+		str++;
 	len = ft_strlen(str);
 	if (len > 10)
 		return (0);
