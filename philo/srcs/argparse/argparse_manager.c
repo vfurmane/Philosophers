@@ -6,12 +6,19 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:16:39 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/05 12:38:33 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/11 17:00:58 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*
+**	Get the last element of the list.
+**	@param {t_arg_list*} list - The full flags list.
+**	@returns {t_arg_list *} the last element of the list,
+**	or NULL on the following errors:
+**	 -	the list is NULL;
+*/
 static t_arg_list	*ap_lstlast(t_arg_list *list)
 {
 	if (list == NULL)
@@ -21,6 +28,14 @@ static t_arg_list	*ap_lstlast(t_arg_list *list)
 	return (list);
 }
 
+/*
+**	Compare two strings.
+**	@param {const char*} str1 - The first string.
+**	@param {const char*} str2 - The second string.
+**	@returns {int} Return an integer less than, equal to, 
+**	or greater than zero if s1 (or the first n bytes thereof) is found, 
+**	respectively, to be less than, to match, or be greater than s2.
+*/
 int	ap_strcmp(const char *str1, const char *str2)
 {
 	size_t	i;
@@ -36,9 +51,12 @@ int	ap_strcmp(const char *str1, const char *str2)
 }
 
 /*
-** Add an argument to the list.
-** flag contains a character or a string.
-** type is SHORT_ARG or LONG_ARG (char or string in flag).
+**	Add an argument to the list.
+**	@param {t_arg_flag} flag - The letter or string composing the flag.
+**	@param {t_arg_type} type - Wether the flag is short or long.
+**	@returns {t_arg_list*} the full list on success, 
+**	or NULL on the following errors:
+**	 -	the allocation of the new element fails;
 */
 t_arg_list	*ap_add_arg(t_arg_flag flag, t_arg_type type)
 {
@@ -88,6 +106,15 @@ int	ap_search_arg(t_arg_list *list, t_arg_flag flag, t_arg_type type)
 	return (-1);
 }
 
+/*
+**	Get the argument matching the flag and the type.
+**	@param {t_arg_list*} list - The list of arguments returned by ap_add_arg.
+**	@param {t_arg_flag} flag - The flag that is being searched.
+**	@param {t_arg_type} type - The type of the flag that is being searched.
+**	@returns {t_arg_list*} Return the list element, 
+**	or NULL on the following errors:
+**	 -	if it has not been found.
+*/
 t_arg_list	*ap_get_arg(t_arg_list *list, t_arg_flag flag,
 	t_arg_type type)
 {

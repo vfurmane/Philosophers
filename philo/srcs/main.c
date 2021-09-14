@@ -6,12 +6,21 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:08 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/07 14:00:08 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/11 17:36:32 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+**	Parse the command line arguments for the simulation.
+**	@param {t_philo_config*} config - The configuration of the simulation. 
+**	@param {int} argc - Total number of arguments.
+**	@param {char**} argv - All command line arguments.
+**	@returns {int} Return 1 if everything went well, 
+**	or -1 on the following errors:
+**	 -	The given arguments are not positive integers.
+*/
 int	parse_philo_args(t_philo_config *config, int argc, char **argv)
 {
 	int	i;

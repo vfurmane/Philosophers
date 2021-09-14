@@ -6,12 +6,16 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 22:56:51 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/04 09:11:04 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/11 17:03:26 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*
+**	Print an usage message.
+**	@param {char*} program_name - The name of the program.
+*/
 void	print_usage(char *program_name)
 {
 	printf("Usage: %s [-h] ", program_name);

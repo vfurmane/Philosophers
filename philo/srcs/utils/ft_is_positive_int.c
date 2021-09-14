@@ -6,12 +6,18 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 10:26:53 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/05 19:46:30 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/11 17:09:19 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
+/*
+**	Check if the string contains a positive integer.
+**	@param {const char*} str - The string to test.
+**	@returns {int} Return 1 if the string contains a positive integer, 
+**	0 if not.
+*/
 int	ft_is_positive_int(const char *str)
 {
 	int			i;
