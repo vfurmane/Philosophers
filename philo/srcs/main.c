@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:08 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/06 12:05:33 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:30:21 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	parse_philo_args(t_philo_config *config, int argc, char **argv)
 void	*nothing(void *param)
 {
 	(void)param;
-	return (NULL);
+	pthread_exit(0);
 }
 
 int	simulation(t_philo_config *config)

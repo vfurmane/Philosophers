@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/06 13:10:09 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/06 13:34:37 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ typedef	struct s_philo_config
 
 typedef	enum e_state
 {
-	PHILO_SLEEPING,
 	PHILO_EATING,
-	PHILO_SLEEPING
+	PHILO_SLEEPING,
+	PHILO_THINKING
 }				t_state;
 
 typedef	struct s_philo
