@@ -43,7 +43,7 @@ int	argparse(int argc, char **argv, t_arg_list *list)
 	t_arg_flag	flag;
 
 	i = 1;
-	while (i < argc && argv[i][0] == '-')
+	while (i < argc && argv[i][0] == '-' && (argv[i][1] != '-' || argv[i][2] != '\0'))
 	{
 		if (argv[i][1] == '-')
 		{
