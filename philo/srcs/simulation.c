@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/08 11:24:52 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/08 11:33:12 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	*simulate_philo_life(t_philo *philo)
 					pthread_exit(NULL);
 				philo_start_eating(philo);
 			}
+			else if (philo->state == PHILO_NOTHING)
+				philo_start_thinking(philo);
 			pthread_mutex_unlock(philo->forks_lock);
 		}
 		else if (philo->state == PHILO_EATING)
