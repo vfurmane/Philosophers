@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/08 09:24:30 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/08 11:24:52 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void	*simulate_philo_life(t_philo *philo)
 			if (philo->left_fork->__data.__lock == 0
 				&& philo->right_fork->__data.__lock == 0)
 			{
-				if (philo_take_fork(philo->id, philo->left_fork) < 0)
+				if (philo_take_fork(philo, philo->left_fork) < 0)
 					pthread_exit(NULL);
-				if (philo_take_fork(philo->id, philo->right_fork) < 0)
+				if (philo_take_fork(philo, philo->right_fork) < 0)
 					pthread_exit(NULL);
-				philo_start_eating(philo->id, &philo->state);
+				philo_start_eating(philo);
 			}
 			pthread_mutex_unlock(philo->forks_lock);
 		}
@@ -39,12 +39,12 @@ void	*simulate_philo_life(t_philo *philo)
 				pthread_exit(NULL);
 			if (pthread_mutex_unlock(philo->right_fork) < 0)
 				pthread_exit(NULL);
-			philo_start_sleeping(philo->id, &philo->state);
+			philo_start_sleeping(philo);
 		}
 		else if (philo->state == PHILO_SLEEPING)
 		{
 			usleep(2000000); /* ===== DELETE ===== */
-			philo_start_thinking(philo->id, &philo->state);
+			philo_start_thinking(philo);
 		}
 	}
 	pthread_exit(NULL);
@@ -80,6 +80,7 @@ int	simulation(t_philo_config *config)
 	uint32_t	i;
 	t_philo		*philos;
 
+	gettimeofday(&config->start_time, NULL); /* return */
 	pthread_mutex_init(&config->forks_lock, NULL);
 	philos = malloc(config->philos_no * sizeof (*philos));
 	i = 0;
@@ -87,6 +88,7 @@ int	simulation(t_philo_config *config)
 	{
 		philos[i].id = i + 1;
 		philos[i].state = PHILO_NOTHING;
+		philos[i].start_time = &config->start_time;
 		philos[i].forks_lock = &config->forks_lock;
 		if (share_forks(config->philos_no, philos, i) < 0)
 			return (-1);
