@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/04 12:16:39 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/04 12:21:23 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/05 12:38:33 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_arg_list	*ap_lstlast(t_arg_list *list)
 	return (list);
 }
 
-static int	ap_strcmp(const char *str1, const char *str2)
+int	ap_strcmp(const char *str1, const char *str2)
 {
 	size_t	i;
 
