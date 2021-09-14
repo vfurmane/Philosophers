@@ -1,5 +1,6 @@
 *.o
-philo*
+philo
+philo_bonus
 !philo*/
 *.out
 *.dSYM/
