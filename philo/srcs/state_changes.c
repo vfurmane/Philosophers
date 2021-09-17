@@ -40,15 +40,16 @@ static long	time_since_start(struct timeval *start_time)
 **	 -	The actual time could not be retrieved;
 **	 -	The mutex (fork) could not be locked.
 */
-int	philo_take_fork(t_philo *philo, pthread_mutex_t *fork)
+int	philo_take_fork(t_philo *philo, t_fork *fork)
 {
 	long	timestamps;
 
 	timestamps = time_since_start(philo->start_time);
 	if (timestamps == -1)
 		return (-1);
-	if (pthread_mutex_lock(fork) != 0)
+	if (pthread_mutex_lock(&fork->lock) != 0)
 		return (-1);
+	fork->is_locked = true;
 	printf("%-20ld %-10d has taken a fork\n", timestamps, philo->id);
 	return (0);
 }

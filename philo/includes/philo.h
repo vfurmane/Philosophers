@@ -40,13 +40,19 @@ typedef enum e_state
 	PHILO_THINKING
 }				t_state;
 
+typedef struct s_fork
+{
+	bool			is_locked;
+	pthread_mutex_t	lock;
+}					t_fork;
+
 typedef struct s_philo
 {
 	uint32_t		id;
 	pthread_t		thread;
 	t_state			state;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	t_fork			*left_fork;
+	t_fork			*right_fork;
 	struct timeval	*start_time;
 	pthread_mutex_t	*forks_lock;
 }					t_philo;
@@ -61,7 +67,7 @@ void		print_usage(char *program_name);
 
 int			simulation(t_philo_config *config);
 
-int			philo_take_fork(t_philo *philo, pthread_mutex_t *fork);
+int			philo_take_fork(t_philo *philo, t_fork *fork);
 int			philo_start_eating(t_philo *philo);
 int			philo_start_sleeping(t_philo *philo);
 int			philo_start_thinking(t_philo *philo);

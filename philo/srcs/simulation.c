@@ -25,9 +25,7 @@ void	*simulate_philo_life(t_philo *philo)
 			|| philo->state == PHILO_THINKING)
 			philo_wants_to_eat(philo);
 		else if (philo->state == PHILO_EATING)
-		{
 			philo_wants_to_sleep(philo);
-		}
 		else if (philo->state == PHILO_SLEEPING)
 			philo_start_thinking(philo);
 	}
@@ -51,7 +49,7 @@ int	share_forks(uint32_t philos_no, t_philo *philos, uint32_t i)
 		philos[i].left_fork = malloc(sizeof (*philos[i].left_fork));
 		if (philos[i].left_fork == NULL)
 			return (-1);
-		if (pthread_mutex_init(philos[i].left_fork, NULL) != 0)
+		if (pthread_mutex_init(&philos[i].left_fork->lock, NULL) != 0)
 			return (-1);
 	}
 	else
@@ -61,7 +59,7 @@ int	share_forks(uint32_t philos_no, t_philo *philos, uint32_t i)
 		philos[i].right_fork = malloc(sizeof (*philos[i].right_fork));
 		if (philos[i].right_fork == NULL)
 			return (-1);
-		if (pthread_mutex_init(philos[i].right_fork, NULL) != 0)
+		if (pthread_mutex_init(&philos[i].right_fork->lock, NULL) != 0)
 			return (-1);
 	}
 	else
@@ -113,9 +111,9 @@ static int	teardown_simulation(t_philo_config *config, t_philo *philos)
 	while (i < config->philos_no)
 	{
 		pthread_join(philos[i].thread, NULL);
-		if (pthread_mutex_destroy(philos[i].left_fork) != 0)
+		if (pthread_mutex_destroy(&philos[i].left_fork->lock) != 0)
 			return (-1);
-		if (pthread_mutex_destroy(philos[i].right_fork) != 0)
+		if (pthread_mutex_destroy(&philos[i].right_fork->lock) != 0)
 			return (-1);
 		i++;
 	}
