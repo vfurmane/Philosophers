@@ -1,0 +1,13 @@
+name: compilation
+on:
+  push:
+    branches:
+      - main
+jobs:
+  norminette:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: alexandregv/norminette-action@v3
+        with:
+          flags: '.'

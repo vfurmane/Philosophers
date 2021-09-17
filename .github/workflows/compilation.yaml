@@ -1,15 +1,13 @@
-name: testing
-on: [push]
+name: compilation
+on:
+  - push
 jobs:
   compilation:
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - run: make -C philo/
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: make -C philo/
-  norminette:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: alexandregv/norminette-action@v3
-        with:
-          flags: '.'
