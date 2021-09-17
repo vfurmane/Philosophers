@@ -2,7 +2,7 @@ name: compilation
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   norminette:
     runs-on: ubuntu-20.04
