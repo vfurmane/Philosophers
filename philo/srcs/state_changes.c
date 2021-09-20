@@ -6,30 +6,11 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:01:56 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/08 16:44:29 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/15 13:53:08 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/*
-**	Compute the time since the start of the simulation.
-**	@param {struct timeval *} start_time - The time of the simulation starting.
-**	@returns {long} Return the time since the start of the simulation, 
-**	or -1 on the following errors:
-**	 -	The time actual time could not be retrieved;
-*/
-static long	time_since_start(struct timeval *start_time)
-{
-	long			timestamps;
-	struct timeval	time_now;
-
-	if (gettimeofday(&time_now, NULL) < 0)
-		return (-1);
-	timestamps = (time_now.tv_usec - start_time->tv_usec) / 1000;
-	timestamps += (time_now.tv_sec - start_time->tv_sec) * 1000;
-	return (timestamps);
-}
 
 /*
 **	Lock the mutex (forks).
@@ -44,13 +25,13 @@ int	philo_take_fork(t_philo *philo, t_fork *fork)
 {
 	long	timestamps;
 
-	timestamps = time_since_start(philo->start_time);
+	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
 	if (pthread_mutex_lock(&fork->lock) != 0)
 		return (-1);
 	fork->is_locked = true;
-	printf("%-20ld %-10d has taken a fork\n", timestamps, philo->id);
+	printf("%ld %d has taken a fork\n", timestamps, philo->id);
 	return (0);
 }
 
@@ -65,11 +46,11 @@ int	philo_start_eating(t_philo *philo)
 {
 	long	timestamps;
 
-	timestamps = time_since_start(philo->start_time);
+	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_EATING;
-	printf("%-20ld %-10d is eating\n", timestamps, philo->id);
+	printf("%ld %d is eating\n", timestamps, philo->id);
 	return (0);
 }
 
@@ -84,11 +65,12 @@ int	philo_start_sleeping(t_philo *philo)
 {
 	long	timestamps;
 
-	timestamps = time_since_start(philo->start_time);
+	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_SLEEPING;
-	printf("%-20ld %-10d is sleeping\n", timestamps, philo->id);
+	printf("%ld %d is sleeping (for %ums)\n", timestamps, philo->id,
+		philo->config->time_to_sleep);
 	return (0);
 }
 
@@ -103,10 +85,10 @@ int	philo_start_thinking(t_philo *philo)
 {
 	long	timestamps;
 
-	timestamps = time_since_start(philo->start_time);
+	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_THINKING;
-	printf("%-20ld %-10d is thinking\n", timestamps, philo->id);
+	printf("%ld %d is thinking\n", timestamps, philo->id);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/11 11:34:15 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/15 13:53:23 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdint.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <unistd.h>
 # include "argparse.h"
 # include "utils.h"
 
@@ -53,8 +54,7 @@ typedef struct s_philo
 	t_state			state;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
-	struct timeval	*start_time;
-	pthread_mutex_t	*forks_lock;
+	t_philo_config	*config;
 }					t_philo;
 
 t_arg_list	*add_all_args(void);
@@ -71,5 +71,8 @@ int			philo_take_fork(t_philo *philo, t_fork *fork);
 int			philo_start_eating(t_philo *philo);
 int			philo_start_sleeping(t_philo *philo);
 int			philo_start_thinking(t_philo *philo);
+
+long		time_since_start(struct timeval *start_time);
+void		wait_time(unsigned int time_in_ms, unsigned int time_before_death);
 
 #endif

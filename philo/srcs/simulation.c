@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/13 10:25:22 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/15 13:54:08 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,23 @@
 */
 void	*simulate_philo_life(t_philo *philo)
 {
+	printf("%ld %d is alive\n", time_since_start(&philo->config->start_time),
+		philo->id);
 	while (true)
 	{
 		if (philo->state == PHILO_NOTHING
 			|| philo->state == PHILO_THINKING)
 			philo_wants_to_eat(philo);
 		else if (philo->state == PHILO_EATING)
+		{
+			wait_time(philo->config->time_to_eat, philo->config->time_to_die);
 			philo_wants_to_sleep(philo);
+		}
 		else if (philo->state == PHILO_SLEEPING)
+		{
+			wait_time(philo->config->time_to_sleep, philo->config->time_to_die);
 			philo_start_thinking(philo);
+		}
 	}
 	pthread_exit(NULL);
 }
@@ -69,7 +77,7 @@ int	share_forks(uint32_t philos_no, t_philo *philos, uint32_t i)
 
 /*
 **	Setup the philosophers for the simulation.
-**	@param {t_philo_config*} config - Th configuration of the simulation.
+**	@param {t_philo_config*} config - The configuration of the simulation.
 **	@returns {t_philo*} Return an array of philos on success, 
 **	or NULL on the following errors:
 **	 -	The time of day could not be retrieved;
@@ -94,8 +102,7 @@ static t_philo	*setup_simulation(t_philo_config *config)
 	{
 		philos[i].id = i + 1;
 		philos[i].state = PHILO_NOTHING;
-		philos[i].start_time = &config->start_time;
-		philos[i].forks_lock = &config->forks_lock;
+		philos[i].config = config;
 		if (share_forks(config->philos_no, philos, i) < 0)
 			return (NULL);
 		i++;
@@ -103,6 +110,16 @@ static t_philo	*setup_simulation(t_philo_config *config)
 	return (philos);
 }
 
+/*
+**	Teardown the philosophers.
+**	@param {t_philo_config*} config - The configuration of the simulation.
+**	@param {t_philo*} philo - The array of philos.
+**	@returns {int} Return 0 on success, 
+**	or -1 on the following errors:
+**	 -	The thread could not be joined;
+**	 -	The mutex (fork) could not be destroyed;
+**	 -	The mutex (forks_lock) could not be destroyed;
+*/
 static int	teardown_simulation(t_philo_config *config, t_philo *philos)
 {
 	uint32_t	i;
@@ -110,21 +127,23 @@ static int	teardown_simulation(t_philo_config *config, t_philo *philos)
 	i = 0;
 	while (i < config->philos_no)
 	{
-		pthread_join(philos[i].thread, NULL);
+		if (pthread_join(philos[i].thread, NULL) != 0)
+			return (-1);
 		if (pthread_mutex_destroy(&philos[i].left_fork->lock) != 0)
 			return (-1);
 		if (pthread_mutex_destroy(&philos[i].right_fork->lock) != 0)
 			return (-1);
 		i++;
 	}
-	pthread_mutex_destroy(&config->forks_lock);
+	if (pthread_mutex_destroy(&config->forks_lock) != 0)
+		return (-1);
 	free(philos);
 	return (0);
 }
 
 /*
 **	Start the simulation.
-**	@param {t_philo_config*} config - Th configuration of the simulation.
+**	@param {t_philo_config*} config - The configuration of the simulation.
 **	@returns {int} Return 0 on success, 
 **	or 1 on the following errors:
 **	 -	The simulation setup has failed;

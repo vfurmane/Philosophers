@@ -19,7 +19,7 @@
 */
 void	philo_wants_to_eat(t_philo *philo)
 {
-	if (pthread_mutex_lock(philo->forks_lock) != 0)
+	if (pthread_mutex_lock(&philo->config->forks_lock) != 0)
 		pthread_exit(NULL);
 	if (philo->left_fork->is_locked == 0
 		&& philo->right_fork->is_locked == 0)
@@ -32,7 +32,7 @@ void	philo_wants_to_eat(t_philo *philo)
 	}
 	else if (philo->state == PHILO_NOTHING)
 		philo_start_thinking(philo);
-	pthread_mutex_unlock(philo->forks_lock);
+	pthread_mutex_unlock(&philo->config->forks_lock);
 }
 
 /*
