@@ -61,7 +61,7 @@ t_arg_list	*add_all_args(void);
 bool		help_needed(t_arg_list *list);
 
 void		philo_wants_to_eat(t_philo *philo);
-void		philo_wants_to_sleep(t_philo *philo);
+int			philo_wants_to_sleep(t_philo *philo);
 
 void		print_usage(char *program_name);
 

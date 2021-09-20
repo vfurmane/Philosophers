@@ -20,14 +20,14 @@
 void	philo_wants_to_eat(t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->config->forks_lock) != 0)
-		pthread_exit(NULL);
+		return ;
 	if (philo->left_fork->is_locked == 0
 		&& philo->right_fork->is_locked == 0)
 	{
 		if (philo_take_fork(philo, philo->left_fork) < 0)
-			pthread_exit(NULL);
+			return ;
 		if (philo_take_fork(philo, philo->right_fork) < 0)
-			pthread_exit(NULL);
+			return ;
 		philo_start_eating(philo);
 	}
 	else if (philo->state == PHILO_NOTHING)
@@ -38,15 +38,18 @@ void	philo_wants_to_eat(t_philo *philo)
 /*
 **	Unlock the mutex (forks) and start sleeping.
 **	@param {t_philo*} philo - The simulated philo.
-**	@returns {void}
+**	@returns {int} Return 0 on success, 
+**	or -1 on the following errors:
+**	 -	The mutex (fork) could not be unlocked;
 */
-void	philo_wants_to_sleep(t_philo *philo)
+int	philo_wants_to_sleep(t_philo *philo)
 {
 	if (pthread_mutex_unlock(&philo->left_fork->lock) < 0)
-		pthread_exit(NULL);
+		return (-1);
 	philo->left_fork->is_locked = false;
 	if (pthread_mutex_unlock(&philo->right_fork->lock) < 0)
-		pthread_exit(NULL);
+		return (-1);
 	philo->right_fork->is_locked = false;
 	philo_start_sleeping(philo);
+	return (0);
 }

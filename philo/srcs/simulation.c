@@ -19,8 +19,6 @@
 */
 void	*simulate_philo_life(t_philo *philo)
 {
-	printf("%ld %d is alive\n", time_since_start(&philo->config->start_time),
-		philo->id);
 	while (true)
 	{
 		if (philo->state == PHILO_NOTHING
@@ -37,7 +35,7 @@ void	*simulate_philo_life(t_philo *philo)
 			philo_start_thinking(philo);
 		}
 	}
-	pthread_exit(NULL);
+	return (NULL);
 }
 
 /*
