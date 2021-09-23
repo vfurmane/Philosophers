@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:01:56 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/23 13:39:45 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:44:29 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ int	philo_start_sleeping(t_philo *philo)
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_SLEEPING;
-	printf("%ld %d is sleeping (for %ums)\n", timestamps, philo->id,
-		philo->config->time_to_sleep);
+	printf("%ld %d is sleeping\n", timestamps, philo->id);
 	return (0);
 }
 
