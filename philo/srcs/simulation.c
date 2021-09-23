@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/15 13:54:08 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:35:11 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,27 @@
 */
 void	*simulate_philo_life(t_philo *philo)
 {
-	while (true)
+	while (philo->state != PHILO_DEAD
+		&& time_since_start(&philo->config->start_time) - philo->last_eat_time
+		< philo->config->time_to_die)
 	{
 		if (philo->state == PHILO_NOTHING
 			|| philo->state == PHILO_THINKING)
 			philo_wants_to_eat(philo);
 		else if (philo->state == PHILO_EATING)
 		{
-			wait_time(philo->config->time_to_eat, philo->config->time_to_die);
+			if (wait_time(philo, philo->config->time_to_eat) < 1)
+				break ;
 			philo_wants_to_sleep(philo);
 		}
 		else if (philo->state == PHILO_SLEEPING)
 		{
-			wait_time(philo->config->time_to_sleep, philo->config->time_to_die);
+			if (wait_time(philo, philo->config->time_to_sleep) < 1)
+				break ;
 			philo_start_thinking(philo);
 		}
 	}
+	philo_dies(philo);
 	return (NULL);
 }
 
@@ -100,6 +105,7 @@ static t_philo	*setup_simulation(t_philo_config *config)
 	{
 		philos[i].id = i + 1;
 		philos[i].state = PHILO_NOTHING;
+		philos[i].last_eat_time = 0;
 		philos[i].config = config;
 		if (share_forks(config->philos_no, philos, i) < 0)
 			return (NULL);

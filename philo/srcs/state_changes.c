@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:01:56 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/15 13:53:08 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/23 13:39:45 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	philo_take_fork(t_philo *philo, t_fork *fork)
 {
 	long	timestamps;
 
+	if (philo->state == PHILO_DEAD)
+		return (0);
 	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
@@ -46,10 +48,13 @@ int	philo_start_eating(t_philo *philo)
 {
 	long	timestamps;
 
+	if (philo->state == PHILO_DEAD)
+		return (0);
 	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_EATING;
+	philo->last_eat_time = timestamps;
 	printf("%ld %d is eating\n", timestamps, philo->id);
 	return (0);
 }
@@ -65,6 +70,8 @@ int	philo_start_sleeping(t_philo *philo)
 {
 	long	timestamps;
 
+	if (philo->state == PHILO_DEAD)
+		return (0);
 	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
@@ -85,10 +92,33 @@ int	philo_start_thinking(t_philo *philo)
 {
 	long	timestamps;
 
+	if (philo->state == PHILO_DEAD)
+		return (0);
 	timestamps = time_since_start(&philo->config->start_time);
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_THINKING;
 	printf("%ld %d is thinking\n", timestamps, philo->id);
+	return (0);
+}
+
+/*
+**	Change philo's state to DEAD and log it.
+**	@param {t_philo*} philo - The simulated philo.
+**	@returns {int} Return 0 on success, 
+**	or -1 on the following errors:
+**	 -	The actual time could not be retrieved;
+*/
+int	philo_dies(t_philo *philo)
+{
+	long	timestamps;
+
+	if (philo->state == PHILO_DEAD)
+		return (0);
+	timestamps = time_since_start(&philo->config->start_time);
+	if (timestamps == -1)
+		return (-1);
+	philo->state = PHILO_DEAD;
+	printf("%ld %d died\n", timestamps, philo->id);
 	return (0);
 }

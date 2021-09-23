@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 16:59:58 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/15 13:53:14 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:35:23 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,30 @@ unsigned int	get_time_in_ms(void)
 
 /*
 **	Wait time in ms.
+**	@param {t_philo*} philo - The simulated philo.
 **	@param {unsigned int} time_in_ms - The time to wait in ms.
-**	@param {unsigned int} time_before_death - The remaining time
 **	before death of philo.
+**	@returns {int} Return 1 on success, 
+**	0 on philo death, 
+**	or -1 on the following errors:
 */
-void	wait_time(unsigned int time_in_ms, unsigned int time_before_death)
+int	wait_time(t_philo *philo, unsigned int time_in_ms)
 {
 	uint32_t	sleep_time;
+	uint32_t	time_now;
 	uint32_t	max_time;
+	uint32_t	time_before_death;
 
-	(void)time_before_death;
+	time_now = get_time_in_ms();
 	sleep_time = time_in_ms;
-	max_time = get_time_in_ms() + time_in_ms;
+	time_before_death = time_now + philo->config->time_to_die
+		- philo->last_eat_time;
+	max_time = time_now + time_in_ms;
 	while (get_time_in_ms() < max_time)
+	{
 		usleep(sleep_time);
+		if (get_time_in_ms() > time_before_death)
+			return (0);
+	}
+	return (1);
 }

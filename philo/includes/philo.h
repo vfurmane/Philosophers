@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/15 13:53:23 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/23 16:25:15 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef enum e_state
 	PHILO_NOTHING,
 	PHILO_EATING,
 	PHILO_SLEEPING,
-	PHILO_THINKING
+	PHILO_THINKING,
+	PHILO_DEAD
 }				t_state;
 
 typedef struct s_fork
@@ -52,6 +53,7 @@ typedef struct s_philo
 	uint32_t		id;
 	pthread_t		thread;
 	t_state			state;
+	uint32_t		last_eat_time;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
 	t_philo_config	*config;
@@ -71,8 +73,9 @@ int			philo_take_fork(t_philo *philo, t_fork *fork);
 int			philo_start_eating(t_philo *philo);
 int			philo_start_sleeping(t_philo *philo);
 int			philo_start_thinking(t_philo *philo);
+int			philo_dies(t_philo *philo);
 
 long		time_since_start(struct timeval *start_time);
-void		wait_time(unsigned int time_in_ms, unsigned int time_before_death);
+int			wait_time(t_philo *philo, unsigned int time_in_ms);
 
 #endif
