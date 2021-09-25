@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - '!*WIP'
 jobs:
   norminette:
     runs-on: ubuntu-20.04
