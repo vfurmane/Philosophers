@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 16:59:58 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/23 16:35:23 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/27 21:24:39 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ int	wait_time(t_philo *philo, unsigned int time_in_ms)
 	time_now = get_time_in_ms();
 	sleep_time = time_in_ms;
 	time_before_death = time_now + philo->config->time_to_die
-		- philo->last_eat_time;
+		+ philo->last_eat_time;
 	max_time = time_now + time_in_ms;
 	while (get_time_in_ms() < max_time)
 	{
 		usleep(sleep_time);
-		if (get_time_in_ms() > time_before_death)
+		if (get_time_in_ms() >= time_before_death)
 			return (0);
 	}
 	return (1);
