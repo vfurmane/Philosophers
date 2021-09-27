@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:01:56 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/23 16:44:29 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/27 12:08:59 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int	philo_take_fork(t_philo *philo, t_fork *fork)
 	if (pthread_mutex_lock(&fork->lock) != 0)
 		return (-1);
 	fork->is_locked = true;
-	printf("%ld %d has taken a fork\n", timestamps, philo->id);
+	pthread_mutex_lock(&philo->config->death_lock);
+	if (!philo->config->death_occured)
+		printf("%ld %d has taken a fork\n", timestamps, philo->id);
+	pthread_mutex_unlock(&philo->config->death_lock);
 	return (0);
 }
 
@@ -55,7 +58,10 @@ int	philo_start_eating(t_philo *philo)
 		return (-1);
 	philo->state = PHILO_EATING;
 	philo->last_eat_time = timestamps;
-	printf("%ld %d is eating\n", timestamps, philo->id);
+	pthread_mutex_lock(&philo->config->death_lock);
+	if (!philo->config->death_occured)
+		printf("%ld %d is eating\n", timestamps, philo->id);
+	pthread_mutex_unlock(&philo->config->death_lock);
 	return (0);
 }
 
@@ -76,7 +82,10 @@ int	philo_start_sleeping(t_philo *philo)
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_SLEEPING;
-	printf("%ld %d is sleeping\n", timestamps, philo->id);
+	pthread_mutex_lock(&philo->config->death_lock);
+	if (!philo->config->death_occured)
+		printf("%ld %d is sleeping\n", timestamps, philo->id);
+	pthread_mutex_unlock(&philo->config->death_lock);
 	return (0);
 }
 
@@ -97,7 +106,10 @@ int	philo_start_thinking(t_philo *philo)
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_THINKING;
-	printf("%ld %d is thinking\n", timestamps, philo->id);
+	pthread_mutex_lock(&philo->config->death_lock);
+	if (!philo->config->death_occured)
+		printf("%ld %d is thinking\n", timestamps, philo->id);
+	pthread_mutex_unlock(&philo->config->death_lock);
 	return (0);
 }
 
@@ -118,6 +130,10 @@ int	philo_dies(t_philo *philo)
 	if (timestamps == -1)
 		return (-1);
 	philo->state = PHILO_DEAD;
-	printf("%ld %d died\n", timestamps, philo->id);
+	pthread_mutex_lock(&philo->config->death_lock);
+	if (!philo->config->death_occured)
+		printf("%ld %d died\n", timestamps, philo->id);
+	philo->config->death_occured = true;
+	pthread_mutex_unlock(&philo->config->death_lock);
 	return (0);
 }

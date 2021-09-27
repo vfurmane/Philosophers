@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/23 16:35:11 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/27 12:08:06 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 */
 void	*simulate_philo_life(t_philo *philo)
 {
-	while (philo->state != PHILO_DEAD
-		&& time_since_start(&philo->config->start_time) - philo->last_eat_time
-		< philo->config->time_to_die)
+	while (time_since_start(&philo->config->start_time) - philo->last_eat_time
+		< philo->config->time_to_die
+		&& !philo->config->death_occured)
 	{
 		if (philo->state == PHILO_NOTHING
 			|| philo->state == PHILO_THINKING)
@@ -97,10 +97,13 @@ static t_philo	*setup_simulation(t_philo_config *config)
 		return (NULL);
 	if (pthread_mutex_init(&config->forks_lock, NULL) != 0)
 		return (NULL);
+	if (pthread_mutex_init(&config->death_lock, NULL) != 0)
+		return (NULL);
 	philos = malloc(config->philos_no * sizeof (*philos));
 	if (philos == NULL)
 		return (NULL);
 	i = 0;
+	config->death_occured = false;
 	while (i < config->philos_no)
 	{
 		philos[i].id = i + 1;
@@ -140,6 +143,8 @@ static int	teardown_simulation(t_philo_config *config, t_philo *philos)
 		i++;
 	}
 	if (pthread_mutex_destroy(&config->forks_lock) != 0)
+		return (-1);
+	if (pthread_mutex_destroy(&config->death_lock) != 0)
 		return (-1);
 	free(philos);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/23 16:25:15 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/09/27 11:39:04 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ typedef struct s_philo_config
 	uint32_t		time_to_eat;
 	uint32_t		time_to_sleep;
 	uint32_t		min_eat_no;
+	bool			death_occured;
 	struct timeval	start_time;
 	pthread_mutex_t	forks_lock;
+	pthread_mutex_t	death_lock;
 }					t_philo_config;
 
 typedef enum e_state
