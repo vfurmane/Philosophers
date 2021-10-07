@@ -6,18 +6,18 @@
 #    By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/03 21:32:49 by vfurmane          #+#    #+#              #
-#    Updated: 2021/09/15 13:38:36 by vfurmane         ###   ########.fr        #
+#    Updated: 2021/10/07 15:15:25 by vfurmane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= philo
-SRCS		= $(addprefix srcs/, check_args.c main.c philo_actions.c put.c simulation.c state_changes.c time.c \
+SRCS		= $(addprefix srcs/, check_args.c death_checker.c main.c philo_actions.c put.c setup.c simulation.c state_changes.c teardown.c time.c \
 			  $(addprefix argparse/, argparse.c argparse_manager.c) \
 			  $(addprefix utils/, ft_atoi.c ft_isdigit.c ft_is_positive_int.c ft_strlen.c))
 OBJS		= $(SRCS:.c=.o)
 INCL		= $(addprefix -I , includes)
 CC			= clang
-CFLAGS		= -Wall -Wextra -Werror -g3 # delete g3
+CFLAGS		= -Wall -Wextra -Werror# -g3# -fsanitize=thread
 LIBS		= -pthread
 RM			= rm -f
 
