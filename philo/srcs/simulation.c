@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/07 15:10:14 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/16 14:28:53 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,43 @@ int	start_philo_life(t_philo *philo)
 */
 int	route_philo_life(t_philo *philo)
 {
-	if (*(t_state *)philo->state.data == PHILO_NOTHING)
+	if (philo->state.data.state == PHILO_NOTHING)
 	{
 		if (start_philo_life(philo) < 1)
 			return (0);
 	}
-	else if (*(t_state *)philo->state.data == PHILO_THINKING)
+	else if (philo->state.data.state == PHILO_THINKING)
 	{
 		if (philo_wants_to_eat(philo) < 1)
 			return (0);
 	}
-	else if (*(t_state *)philo->state.data == PHILO_EATING)
+	else if (philo->state.data.state == PHILO_EATING)
 	{
 		if (wait_time(philo, philo->config->time_to_eat) < 1)
 			return (0);
 		if (philo_wants_to_sleep(philo, true) < 1)
 			return (0);
 	}
-	else if (*(t_state *)philo->state.data == PHILO_SLEEPING)
+	else if (philo->state.data.state == PHILO_SLEEPING)
 	{
 		if (wait_time(philo, philo->config->time_to_sleep) < 1)
 			return (0);
 		philo_start_thinking(philo);
 	}
 	return (1);
+}
+
+bool	simulation_continues(t_philo *philo)
+{
+	bool	ret;
+
+	pthread_mutex_lock(philo->config->death_occured.mutex);
+	ret = time_since_start(&philo->config->start_time)
+		- philo->last_eat_time.data.uint32 < philo->config->time_to_die
+		&& !philo->config->death_occured.data.boolean
+		&& !philo->config->end_of_simulation.data.boolean;
+	pthread_mutex_unlock(philo->config->death_occured.mutex);
+	return (ret);
 }
 
 /*
@@ -68,17 +81,16 @@ int	route_philo_life(t_philo *philo)
 */
 void	*simulate_philo_life(t_philo *philo)
 {
-	pthread_mutex_lock(philo->config->death_occured.mutex);
-	while (time_since_start(&philo->config->start_time)
-		- *(uint32_t *)philo->last_eat_time.data < philo->config->time_to_die
-		&& !*(int *)philo->config->death_occured.data)
+	while (simulation_continues(philo))
 	{
-		pthread_mutex_unlock(philo->config->death_occured.mutex);
 		if (route_philo_life(philo) < 1)
 			break ;
-		pthread_mutex_lock(philo->config->death_occured.mutex);
 	}
-	pthread_mutex_unlock(philo->config->death_occured.mutex);
+	if (philo->state.data.state == PHILO_EATING)
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+	}
 	philo_dies(philo);
 	return (NULL);
 }

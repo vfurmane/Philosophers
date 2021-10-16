@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 11:28:46 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/07 11:38:59 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/16 13:50:51 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ int	philo_wants_to_sleep(t_philo *philo, bool drop_forks)
 bool	philo_is_dead(t_philo *philo)
 {
 	pthread_mutex_lock(philo->config->death_occured.mutex);
-	if (*(int *)philo->config->death_occured.data)
+	if (philo->config->death_occured.data.boolean)
 	{
 		pthread_mutex_unlock(philo->config->death_occured.mutex);
 		return (true);
 	}
 	pthread_mutex_unlock(philo->config->death_occured.mutex);
 	if (time_since_start(&philo->config->start_time)
-		>= *(uint32_t *)philo->last_eat_time.data + philo->config->time_to_die)
+		>= philo->last_eat_time.data.uint32 + philo->config->time_to_die)
 		return (true);
 	return (false);
 }

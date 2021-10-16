@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/07 15:16:12 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/16 13:45:57 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,26 @@
 # include "argparse.h"
 # include "utils.h"
 
+typedef enum e_state
+{
+	PHILO_NOTHING,
+	PHILO_EATING,
+	PHILO_SLEEPING,
+	PHILO_THINKING,
+	PHILO_DEAD
+}				t_state;
+
+typedef union u_data
+{
+	bool		boolean;
+	t_state		state;
+	uint32_t	uint32;
+}				t_data;
+
 typedef struct s_mutex_data
 {
 	pthread_mutex_t	*mutex;
-	void			*data;
+	t_data			data;
 }				t_mutex_data;
 
 typedef struct s_philo_config
@@ -35,20 +51,12 @@ typedef struct s_philo_config
 	uint32_t		time_to_eat;
 	uint32_t		time_to_sleep;
 	uint32_t		min_eat_no;
+	t_mutex_data	end_of_simulation;
 	t_mutex_data	death_occured;
 	struct timeval	start_time;
 	pthread_mutex_t	forks_lock;
 	pthread_mutex_t	death_lock;
 }					t_philo_config;
-
-typedef enum e_state
-{
-	PHILO_NOTHING,
-	PHILO_EATING,
-	PHILO_SLEEPING,
-	PHILO_THINKING,
-	PHILO_DEAD
-}				t_state;
 
 typedef struct s_philo
 {

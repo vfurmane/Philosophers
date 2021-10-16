@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 16:59:58 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/07 15:09:46 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/16 13:55:21 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ int	wait_time(t_philo *philo, unsigned int time_in_ms)
 	time_now = get_time_in_ms();
 	sleep_time = 500;
 	time_before_death = time_now + philo->config->time_to_die
-		+ *(uint32_t *)philo->last_eat_time.data;
+		+ philo->last_eat_time.data.uint32;
 	max_time = time_now + time_in_ms;
 	pthread_mutex_lock(philo->config->death_occured.mutex);
 	while (get_time_in_ms() < max_time
-		&& !*(int *)philo->config->death_occured.data)
+		&& !philo->config->death_occured.data.boolean)
 	{
 		pthread_mutex_unlock(philo->config->death_occured.mutex);
 		usleep(sleep_time);

@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:10:30 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/07 15:10:43 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/16 13:50:21 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ bool	death_occured(t_philo *philos)
 	pthread_mutex_lock(philos[i].last_eat_time.mutex);
 	while (i < philos_no)
 	{
-		if (*(t_state *)philos[i].state.data == PHILO_DEAD
-			|| *(uint32_t *)philos[i].last_eat_time.data
+		if (philos[i].state.data.state == PHILO_DEAD
+			|| philos[i].last_eat_time.data.uint32
 			+ philos[i].config->time_to_die
 			<= time_since_start(&philos[i].config->start_time))
 		{
@@ -44,19 +44,11 @@ bool	death_occured(t_philo *philos)
 */
 void	*check_on_philos(t_philo *philos)
 {
-	uint32_t	i;
-
 	while (!death_occured(philos))
 	{
 	}
 	pthread_mutex_lock(philos[0].config->death_occured.mutex);
-	*(int *)philos[0].config->death_occured.data = 1;
+	philos[0].config->death_occured.data.boolean = true;
 	pthread_mutex_unlock(philos[0].config->death_occured.mutex);
-	i = 0;
-	while (i < philos[0].config->philos_no)
-	{
-		pthread_mutex_unlock(philos[i].left_fork);
-		i++;
-	}
 	return (NULL);
 }

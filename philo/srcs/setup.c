@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:07:12 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/07 15:15:52 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/16 13:49:26 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,13 @@ t_philo	*config_simulation(t_philo_config *config)
 		return (NULL);
 	if (pthread_mutex_init(&config->death_lock, NULL) != 0)
 		return (NULL);
+	config->end_of_simulation.data.boolean = false;
 	config->death_occured.mutex = malloc(sizeof (*config->death_occured.mutex));
 	if (config->death_occured.mutex == NULL)
 		return (NULL);
 	if (pthread_mutex_init(config->death_occured.mutex, NULL) != 0)
 		return (NULL);
-	config->death_occured.data = malloc(sizeof (int));
-	if (config->death_occured.data == NULL)
-		return (NULL);
-	*(int *)config->death_occured.data = false;
+	config->death_occured.data.boolean = false;
 	philos = malloc(config->philos_no * sizeof (*philos));
 	if (philos == NULL)
 		return (NULL);
@@ -57,19 +55,13 @@ t_philo	*config_simulation(t_philo_config *config)
 int	config_philo(t_philo_config *config, t_philo *philo)
 {
 	philo->state.mutex = &config->death_lock;
-	philo->state.data = malloc(sizeof(t_state));
-	if (philo->state.data == NULL)
-		return (-1);
-	*(t_state *)philo->state.data = PHILO_NOTHING;
+	philo->state.data.state = PHILO_NOTHING;
 	philo->last_eat_time.mutex = malloc(sizeof (*philo->last_eat_time.mutex));
 	if (philo->last_eat_time.mutex == NULL)
 		return (-1);
 	if (pthread_mutex_init(philo->last_eat_time.mutex, NULL) != 0)
 		return (-1);
-	philo->last_eat_time.data = malloc(sizeof(uint32_t));
-	if (philo->last_eat_time.data == NULL)
-		return (-1);
-	*(uint32_t *)philo->last_eat_time.data = 0;
+	philo->last_eat_time.data.uint32 = 0;
 	philo->config = config;
 	return (0);
 }
