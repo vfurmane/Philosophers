@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 16:59:58 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/18 09:16:00 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/18 09:18:38 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ long	time_since_start(struct timeval *start_time)
 	if (gettimeofday(&time_now, NULL) < 0)
 		return (-1);
 	timestamps = (time_now.tv_sec * 1000 + time_now.tv_usec / 1000)
-	- (start_time->tv_sec * 1000 + start_time->tv_usec / 1000);
+		- (start_time->tv_sec * 1000 + start_time->tv_usec / 1000);
 	return (timestamps);
 }
 
