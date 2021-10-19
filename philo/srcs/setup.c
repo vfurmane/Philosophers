@@ -6,11 +6,33 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:07:12 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/16 13:49:26 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/19 16:31:14 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/*
+*/
+t_philo	*malloc_config(t_philo_config *config)
+{
+	t_philo	*philos;
+
+	config->meals_target.mutex = malloc(sizeof (*config->meals_target.mutex));
+	if (config->meals_target.mutex == NULL)
+		return (NULL);
+	config->end_of_simulation.mutex
+		= malloc(sizeof (*config->end_of_simulation.mutex));
+	if (config->end_of_simulation.mutex == NULL)
+		return (NULL);
+	config->death_occured.mutex = malloc(sizeof (*config->death_occured.mutex));
+	if (config->death_occured.mutex == NULL)
+		return (NULL);
+	philos = malloc(config->philos_no * sizeof (*philos));
+	if (philos == NULL)
+		return (NULL);
+	return (philos);
+}
 
 /*
 **	Set config variables.
@@ -22,22 +44,22 @@ t_philo	*config_simulation(t_philo_config *config)
 {
 	t_philo	*philos;
 
+	philos = malloc_config(config);
 	if (gettimeofday(&config->start_time, NULL) < 0)
 		return (NULL);
 	if (pthread_mutex_init(&config->forks_lock, NULL) != 0)
 		return (NULL);
 	if (pthread_mutex_init(&config->death_lock, NULL) != 0)
 		return (NULL);
-	config->end_of_simulation.data.boolean = false;
-	config->death_occured.mutex = malloc(sizeof (*config->death_occured.mutex));
-	if (config->death_occured.mutex == NULL)
+	if (pthread_mutex_init(config->meals_target.mutex, NULL) != 0)
 		return (NULL);
+	config->meals_target.data.uint32 = 0;
+	if (pthread_mutex_init(config->end_of_simulation.mutex, NULL) != 0)
+		return (NULL);
+	config->end_of_simulation.data.boolean = false;
 	if (pthread_mutex_init(config->death_occured.mutex, NULL) != 0)
 		return (NULL);
 	config->death_occured.data.boolean = false;
-	philos = malloc(config->philos_no * sizeof (*philos));
-	if (philos == NULL)
-		return (NULL);
 	return (philos);
 }
 
@@ -56,6 +78,12 @@ int	config_philo(t_philo_config *config, t_philo *philo)
 {
 	philo->state.mutex = &config->death_lock;
 	philo->state.data.state = PHILO_NOTHING;
+	philo->meals_no.mutex = malloc(sizeof (*philo->meals_no.mutex));
+	if (philo->meals_no.mutex == NULL)
+		return (-1);
+	if (pthread_mutex_init(philo->meals_no.mutex, NULL) != 0)
+		return (-1);
+	philo->meals_no.data.uint32 = 0;
 	philo->last_eat_time.mutex = malloc(sizeof (*philo->last_eat_time.mutex));
 	if (philo->last_eat_time.mutex == NULL)
 		return (-1);

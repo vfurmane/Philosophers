@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:08 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/09/11 17:36:32 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/18 10:49:32 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@ int	parse_philo_args(t_philo_config *config, int argc, char **argv)
 	config->time_to_die = ft_atoi(argv[1]);
 	config->time_to_eat = ft_atoi(argv[2]);
 	config->time_to_sleep = ft_atoi(argv[3]);
+	config->min_eat_no = 0;
+	config->min_eat_no_set = false;
 	if (argc == 5)
+	{
 		config->min_eat_no = ft_atoi(argv[4]);
+		config->min_eat_no_set = true;
+	}
 	return (1);
 }
 
@@ -67,5 +72,7 @@ int	main(int argc, char **argv)
 	if (parse_philo_args(&config, argc - arg_start, &argv[arg_start]) < 0)
 		return (1);
 	ap_free(list);
+	if (config.min_eat_no_set && config.min_eat_no == 0)
+		return (0);
 	return (simulation(&config));
 }

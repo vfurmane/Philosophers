@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 11:28:46 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/16 13:50:51 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/18 11:46:15 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,16 @@
 int	philo_wants_to_eat(t_philo *philo)
 {
 	if (philo_take_fork(philo, philo->left_fork) < 1)
+	{
+		pthread_mutex_unlock(philo->left_fork);
 		return (0);
+	}
 	if (philo_take_fork(philo, philo->right_fork) < 1)
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return (0);
+	}
 	philo_start_eating(philo);
 	return (1);
 }

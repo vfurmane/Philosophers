@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:10:30 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/16 13:50:21 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/19 16:13:25 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,29 @@ bool	death_occured(t_philo *philos)
 	return (false);
 }
 
+bool	all_philos_have_eaten(t_philo *philos)
+{
+	pthread_mutex_lock(philos[0].config->meals_target.mutex);
+	if (philos[0].config->meals_target.data.uint32
+		>= philos[0].config->philos_no
+		&& philos[0].config->min_eat_no_set)
+		return (true);
+	pthread_mutex_unlock(philos[0].config->meals_target.mutex);
+	return (false);
+}
+
 /*
 */
 void	*check_on_philos(t_philo *philos)
 {
-	while (!death_occured(philos))
+	while (!death_occured(philos) && !all_philos_have_eaten(philos))
 	{
 	}
 	pthread_mutex_lock(philos[0].config->death_occured.mutex);
-	philos[0].config->death_occured.data.boolean = true;
+	if (death_occured(philos))
+		philos[0].config->death_occured.data.boolean = true;
+	else
+		philos[0].config->end_of_simulation.data.boolean = true;
 	pthread_mutex_unlock(philos[0].config->death_occured.mutex);
 	return (NULL);
 }

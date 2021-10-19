@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:00:14 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/16 14:28:53 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/19 15:29:25 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,12 @@ bool	simulation_continues(t_philo *philo)
 	bool	ret;
 
 	pthread_mutex_lock(philo->config->death_occured.mutex);
+	pthread_mutex_lock(philo->config->end_of_simulation.mutex);
 	ret = time_since_start(&philo->config->start_time)
 		- philo->last_eat_time.data.uint32 < philo->config->time_to_die
 		&& !philo->config->death_occured.data.boolean
 		&& !philo->config->end_of_simulation.data.boolean;
+	pthread_mutex_unlock(philo->config->end_of_simulation.mutex);
 	pthread_mutex_unlock(philo->config->death_occured.mutex);
 	return (ret);
 }
@@ -127,8 +129,8 @@ int	simulation(t_philo_config *config)
 			(void *(*)(void *))check_on_philos, philos) != 0)
 		return (1);
 	if (pthread_join(check_thread, NULL) != 0)
-		return (-1);
+		return (1);
 	if (teardown_simulation(config, philos) < 0)
 		return (1);
-	return (0);
+	return (config->death_occured.data.boolean);
 }

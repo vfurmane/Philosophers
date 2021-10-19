@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:40 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/16 13:45:57 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/19 15:29:02 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct s_philo_config
 	uint32_t		time_to_eat;
 	uint32_t		time_to_sleep;
 	uint32_t		min_eat_no;
+	bool			min_eat_no_set;
+	t_mutex_data	meals_target;
 	t_mutex_data	end_of_simulation;
 	t_mutex_data	death_occured;
 	struct timeval	start_time;
@@ -64,6 +66,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	t_mutex_data	state;
 	t_mutex_data	last_eat_time;
+	t_mutex_data	meals_no;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_philo_config	*config;
@@ -86,6 +89,7 @@ int			config_philo(t_philo_config *config, t_philo *philo);
 int			share_forks(uint32_t philos_no, t_philo *philos, uint32_t i);
 t_philo		*setup_simulation(t_philo_config *config);
 
+bool		simulation_continues(t_philo *philo);
 int			simulation(t_philo_config *config);
 
 int			philo_take_fork(t_philo *philo, pthread_mutex_t *fork);

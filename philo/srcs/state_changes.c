@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 14:01:56 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/16 14:16:21 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/19 16:23:45 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	philo_take_fork(t_philo *philo, pthread_mutex_t *fork)
 		pthread_mutex_unlock(philo->state.mutex);
 		return (0);
 	}
-	else
+	if (simulation_continues(philo))
 		printf("%ld %d has taken a fork\n", timestamps, philo->id);
 	pthread_mutex_unlock(philo->state.mutex);
 	return (1);
@@ -67,10 +67,16 @@ int	philo_start_eating(t_philo *philo)
 	philo->last_eat_time.data.uint32 = timestamps;
 	pthread_mutex_unlock(philo->last_eat_time.mutex);
 	pthread_mutex_lock(philo->state.mutex);
-	pthread_mutex_lock(philo->config->death_occured.mutex);
-	if (!philo->config->death_occured.data.boolean)
-		printf("%ld %d is eating\n", timestamps, philo->id);
-	pthread_mutex_unlock(philo->config->death_occured.mutex);
+	if (simulation_continues(philo))
+	{
+		if (!philo->config->death_occured.data.boolean)
+			printf("%ld %d is eating\n", timestamps, philo->id);
+		philo->meals_no.data.uint32++;
+		pthread_mutex_lock(philo->config->meals_target.mutex);
+		if (philo->meals_no.data.uint32 == philo->config->min_eat_no)
+			philo->config->meals_target.data.uint32++;
+	}
+	pthread_mutex_unlock(philo->config->meals_target.mutex);
 	pthread_mutex_unlock(philo->state.mutex);
 	return (1);
 }
@@ -93,10 +99,9 @@ int	philo_start_sleeping(t_philo *philo)
 		return (-1);
 	philo->state.data.state = PHILO_SLEEPING;
 	pthread_mutex_lock(philo->state.mutex);
-	pthread_mutex_lock(philo->config->death_occured.mutex);
-	if (!philo->config->death_occured.data.boolean)
+	if (simulation_continues(philo)
+		&& !philo->config->death_occured.data.boolean)
 		printf("%ld %d is sleeping\n", timestamps, philo->id);
-	pthread_mutex_unlock(philo->config->death_occured.mutex);
 	pthread_mutex_unlock(philo->state.mutex);
 	return (1);
 }
@@ -119,10 +124,9 @@ int	philo_start_thinking(t_philo *philo)
 		return (-1);
 	philo->state.data.state = PHILO_THINKING;
 	pthread_mutex_lock(philo->state.mutex);
-	pthread_mutex_lock(philo->config->death_occured.mutex);
-	if (!philo->config->death_occured.data.boolean)
+	if (simulation_continues(philo)
+		&& !philo->config->death_occured.data.boolean)
 		printf("%ld %d is thinking\n", timestamps, philo->id);
-	pthread_mutex_unlock(philo->config->death_occured.mutex);
 	pthread_mutex_unlock(philo->state.mutex);
 	return (0);
 }
@@ -147,8 +151,10 @@ int	philo_dies(t_philo *philo)
 	pthread_mutex_lock(philo->state.mutex);
 	pthread_mutex_lock(philo->config->death_occured.mutex);
 	if (!philo->config->end_of_simulation.data.boolean)
+	{
 		printf("%ld %d died\n", timestamps, philo->id);
-	philo->config->death_occured.data.boolean = true;
+		philo->config->death_occured.data.boolean = true;
+	}
 	philo->config->end_of_simulation.data.boolean = true;
 	pthread_mutex_unlock(philo->config->death_occured.mutex);
 	pthread_mutex_unlock(philo->state.mutex);
