@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:10:30 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/19 16:13:25 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/20 11:03:28 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ bool	death_occured(t_philo *philos)
 
 	i = 0;
 	philos_no = philos[i].config->philos_no;
-	pthread_mutex_lock(philos[i].last_eat_time.mutex);
 	while (i < philos_no)
 	{
-		if (philos[i].state.data.state == PHILO_DEAD
+		pthread_mutex_lock(philos[i].last_eat_time.mutex);
+		if (philos[0].config->death_occured.data.boolean
 			|| philos[i].last_eat_time.data.uint32
 			+ philos[i].config->time_to_die
 			<= time_since_start(&philos[i].config->start_time))
@@ -34,21 +34,20 @@ bool	death_occured(t_philo *philos)
 		}
 		pthread_mutex_unlock(philos[i].last_eat_time.mutex);
 		i++;
-		if (i < philos_no)
-			pthread_mutex_lock(philos[i].last_eat_time.mutex);
 	}
 	return (false);
 }
 
 bool	all_philos_have_eaten(t_philo *philos)
 {
+	bool	ret;
+
 	pthread_mutex_lock(philos[0].config->meals_target.mutex);
-	if (philos[0].config->meals_target.data.uint32
+	ret = philos[0].config->meals_target.data.uint32
 		>= philos[0].config->philos_no
-		&& philos[0].config->min_eat_no_set)
-		return (true);
+		&& philos[0].config->min_eat_no_set;
 	pthread_mutex_unlock(philos[0].config->meals_target.mutex);
-	return (false);
+	return (ret);
 }
 
 /*

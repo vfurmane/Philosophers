@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 11:28:46 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/18 11:46:15 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/20 10:26:10 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,13 @@ bool	philo_is_dead(t_philo *philo)
 		return (true);
 	}
 	pthread_mutex_unlock(philo->config->death_occured.mutex);
+	pthread_mutex_lock(philo->last_eat_time.mutex);
 	if (time_since_start(&philo->config->start_time)
 		>= philo->last_eat_time.data.uint32 + philo->config->time_to_die)
+	{
+		pthread_mutex_unlock(philo->last_eat_time.mutex);
 		return (true);
+	}
+	pthread_mutex_unlock(philo->last_eat_time.mutex);
 	return (false);
 }
