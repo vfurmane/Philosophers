@@ -6,7 +6,7 @@
 /*   By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 21:33:08 by vfurmane          #+#    #+#             */
-/*   Updated: 2021/10/18 10:49:32 by vfurmane         ###   ########.fr       */
+/*   Updated: 2021/10/20 09:22:44 by vfurmane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,22 @@ int	parse_philo_args(t_philo_config *config, int argc, char **argv)
 	return (1);
 }
 
+bool	edge_cases(t_philo_config *config)
+{
+	if (config->philos_no == 0)
+		return (true);
+	else if (config->min_eat_no_set && config->min_eat_no == 0)
+		return (true);
+	else if (config->philos_no == 1)
+	{
+		printf("0 1 has taken a fork\n");
+		usleep(config->time_to_die * 1000);
+		printf("%d 1 died\n", config->time_to_die);
+		return (true);
+	}
+	return (false);
+}
+
 int	main(int argc, char **argv)
 {
 	int				arg_start;
@@ -72,7 +88,7 @@ int	main(int argc, char **argv)
 	if (parse_philo_args(&config, argc - arg_start, &argv[arg_start]) < 0)
 		return (1);
 	ap_free(list);
-	if (config.min_eat_no_set && config.min_eat_no == 0)
+	if (edge_cases(&config))
 		return (0);
 	return (simulation(&config));
 }
