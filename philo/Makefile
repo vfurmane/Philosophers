@@ -6,7 +6,7 @@
 #    By: vfurmane <vfurmane@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/03 21:32:49 by vfurmane          #+#    #+#              #
-#    Updated: 2021/10/20 11:03:13 by vfurmane         ###   ########.fr        #
+#    Updated: 2021/10/20 13:48:29 by vfurmane         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS		= $(addprefix srcs/, check_args.c death_checker.c main.c philo_actions.c p
 OBJS		= $(SRCS:.c=.o)
 INCL		= $(addprefix -I , includes)
 CC			= clang
-CFLAGS		= -Wall -Wextra -Werror# -g3 -fsanitize=thread
+CFLAGS		= -Wall -Wextra -Werror
 LIBS		= -pthread
 RM			= rm -f
 
